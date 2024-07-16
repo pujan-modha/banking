@@ -35,20 +35,23 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+interface Account {
+  name: string;
+  currentBalance: number;
+}
+
+interface DoughnutChartProps {
+  accounts: Account[];
+}
+
 export function DoughnutChart({ accounts }: DoughnutChartProps) {
   const chartData = React.useMemo(() => {
-    return [
-      { bank: "bank-1", amount: 275, fill: "var(--color-bank-1)" },
-      { bank: "bank-2", amount: 200, fill: "var(--color-bank-2)" },
-      { bank: "bank-3", amount: 287, fill: "var(--color-bank-3)" },
-      { bank: "bank-4", amount: 173, fill: "var(--color-bank-4)" },
-      { bank: "bank-5", amount: 190, fill: "var(--color-bank-5)" },
-    ];
-  }, []);
-
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.amount, 0);
-  }, [chartData]);
+    return accounts.map((account, index) => ({
+      bank: account.name,
+      amount: account.currentBalance,
+      fill: `hsl(var(--chart-${index + 1}))`,
+    }));
+  }, [accounts]);
 
   return (
     <div className="flex flex-col">
